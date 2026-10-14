@@ -1,1 +1,98 @@
-see next
+<!DOCTYPE html>
+<html lang="ru" class="scroll-smooth">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>VibeCode Hub — Claude Code & ChatGPT 2026</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<script>tailwind.config={theme:{extend:{colors:{bg:{primary:'#07070b',secondary:'#0c0c12',card:'#12121a',border:'#1e1e2e'},accent:{blue:'#3b82f6',purple:'#8b5cf6',cyan:'#06b6d4',pink:'#ec4899'},text:{muted:'#a1a1aa'}},fontFamily:{sans:['Inter','system-ui','sans-serif'],mono:['JetBrains Mono','monospace']}}}}</script>
+<style>body{background:#07070b;color:#fff;font-family:Inter,system-ui,sans-serif}.gradient-text{background:linear-gradient(135deg,#3b82f6,#8b5cf6,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent}.card-glow{transition:all .3s}.card-glow:hover{transform:translateY(-4px);box-shadow:0 0 30px rgba(59,130,246,.25)}.toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(100px);background:linear-gradient(135deg,#3b82f6,#8b5cf6);color:#fff;padding:.875rem 1.75rem;border-radius:9999px;font-weight:600;z-index:9999;opacity:0;transition:all .4s}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}.card-selected{border-color:#3b82f6!important;background:linear-gradient(135deg,rgba(59,130,246,.15),rgba(139,92,246,.1))!important}.code-badge{font-family:JetBrains Mono,monospace;background:rgba(59,130,246,.15);color:#60a5fa;border:1px solid rgba(59,130,246,.3)}.nav-blur{backdrop-filter:blur(16px);background:rgba(7,7,11,.85);border-bottom:1px solid rgba(30,30,46,.8)}</style>
+</head>
+<body class="bg-bg-primary text-white antialiased">
+<div id="toast" class="toast">Скопировано!</div>
+<nav class="fixed top-0 left-0 right-0 z-50 nav-blur"><div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between"><a href="#hero" class="font-bold text-lg">VibeCode <span class="text-accent-cyan">Hub</span></a><div class="hidden md:flex gap-1 text-sm text-text-muted"><a href="#cheats" class="px-3 py-2 hover:text-white">Коды</a><a href="#download" class="px-3 py-2 hover:text-white">Установка</a><a href="#windows" class="px-3 py-2 hover:text-white">Windows</a><a href="#musthave" class="px-3 py-2 hover:text-white">Must-have</a></div></div></nav>
+
+<section id="hero" class="min-h-screen flex items-center justify-center pt-16 px-4"><div class="text-center max-w-4xl"><div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-accent-blue/10 border border-accent-blue/30 text-accent-blue text-sm mb-8"><span class="w-2 h-2 rounded-full bg-accent-cyan animate-pulse"></span> Дашборд вайб-кодера 2026</div><h1 class="text-4xl sm:text-6xl font-black mb-6 leading-tight">Всё, что нужно<br><span class="gradient-text">Claude Code и ChatGPT</span><br>в 2026</h1><p class="text-lg text-text-muted mb-10">Инструкции для Windows · обход ошибок · OmniRoute · DeepSeek</p><div class="flex flex-col sm:flex-row gap-4 justify-center"><a href="#windows" class="px-8 py-4 rounded-2xl bg-gradient-to-r from-accent-blue to-accent-purple font-semibold hover:scale-105 transition">Windows: ошибки и установка</a><a href="#download" class="px-8 py-4 rounded-2xl bg-bg-card border border-bg-border font-semibold">Скачать всё</a></div></div></section>
+
+<section id="windows" class="py-20 px-4 bg-bg-secondary/50"><div class="max-w-4xl mx-auto"><div class="text-center mb-10"><span class="text-red-400 text-xs font-semibold uppercase">Windows PowerShell</span><h2 class="text-3xl sm:text-4xl font-bold mt-2 mb-3">Все нюансы и ошибки</h2></div>
+
+<div class="space-y-4 mb-10">
+<div class="p-5 rounded-2xl bg-bg-card border border-red-500/30">
+<div class="font-semibold text-red-400 mb-2 text-lg">❌ git : Имя "git" не распознано</div>
+<p class="text-text-muted text-sm mb-3">Git не установлен или не в PATH.</p>
+<p class="text-sm font-semibold text-white mb-1">Вариант А — поставить Git:</p>
+<ol class="text-sm text-text-muted list-decimal ml-5 space-y-1 mb-3">
+<li>Скачай <a href="https://git-scm.com/download/win" target="_blank" class="text-accent-blue hover:underline">git-scm.com/download/win</a></li>
+<li>Установи (можно всё по умолчанию)</li>
+<li><strong class="text-white">Закрой и заново открой PowerShell</strong></li>
+<li>Проверь: <code class="text-accent-cyan">git --version</code></li>
+</ol>
+<p class="text-sm font-semibold text-white mb-1">Вариант Б — без Git (ZIP):</p>
+<ol class="text-sm text-text-muted list-decimal ml-5 space-y-1">
+<li>Открой <a href="https://github.com/diegosouzapw/OmniRoute" target="_blank" class="text-accent-blue hover:underline">github.com/diegosouzapw/OmniRoute</a></li>
+<li>Code → <strong class="text-white">Download ZIP</strong></li>
+<li>Распакуй → в PowerShell: <code class="text-accent-cyan">cd путь\к\OmniRoute</code></li>
+</ol>
+</div>
+
+<div class="p-5 rounded-2xl bg-bg-card border border-yellow-500/30">
+<div class="font-semibold text-yellow-400 mb-2 text-lg">⚠️ npm warn install-scripts</div>
+<p class="text-text-muted text-sm mb-2">Claude Code поставился, но postinstall заблокирован. Выполни:</p>
+<div class="bg-bg-secondary rounded-xl p-3 font-mono text-sm text-accent-cyan mb-2">npm install -g --allow-scripts=@anthropic-ai/claude-code</div>
+<button onclick="copyText('npm install -g --allow-scripts=@anthropic-ai/claude-code',this)" class="px-3 py-1.5 rounded-lg bg-bg-secondary border border-bg-border text-xs hover:border-yellow-400 hover:text-yellow-400">Скопировать</button>
+<p class="text-xs text-text-muted mt-2">Проверка: <code class="text-accent-cyan">claude --version</code></p>
+</div>
+
+<div class="p-5 rounded-2xl bg-bg-card border border-bg-border">
+<div class="font-semibold text-accent-cyan mb-2">claude не находится после установки</div>
+<p class="text-text-muted text-sm">Закрой PowerShell полностью и открой новый. npm добавляет путь в PATH только для новых сессий.</p>
+</div>
+
+<div class="p-5 rounded-2xl bg-bg-card border border-bg-border">
+<div class="font-semibold text-accent-purple mb-2">OmniRoute: два окна</div>
+<p class="text-text-muted text-sm"><code class="text-accent-cyan">npm run dev</code> — оставь работать. <code class="text-accent-cyan">omniroute setup-claude</code> и <code class="text-accent-cyan">omniroute launch</code> — во <strong class="text-white">втором</strong> терминале.</p>
+</div>
+</div>
+
+<a href="https://github.com/hursaalo/vibecode-hub/blob/main/windows-setup.md" target="_blank" class="block text-center text-accent-blue hover:underline text-sm mb-4">Полная шпаргалка на GitHub →</a>
+</div></section>
+
+<section id="download" class="py-20 px-4"><div class="max-w-4xl mx-auto"><div class="text-center mb-10"><span class="text-accent-blue text-xs font-semibold uppercase">Setup</span><h2 class="text-3xl font-bold mt-2 mb-3">Установка по шагам</h2></div>
+<div class="grid sm:grid-cols-2 gap-4 mb-8">
+<button id="btn-download-all" class="p-6 rounded-2xl bg-gradient-to-br from-accent-blue/20 to-accent-purple/10 border border-accent-blue/40 text-left"><div class="text-3xl mb-2">📦</div><div class="font-bold mb-1">Скачать скрипт (.sh)</div><div class="text-sm text-text-muted">Все команды одним файлом</div></button>
+<button id="btn-download-md" class="p-6 rounded-2xl bg-bg-card border border-bg-border text-left"><div class="text-3xl mb-2">📄</div><div class="font-bold mb-1">Скачать шпаргалку (.md)</div><div class="text-sm text-text-muted">Коды + ошибки Windows</div></button>
+</div>
+<div class="rounded-2xl bg-bg-card border border-bg-border p-6 space-y-5">
+<div><div class="font-semibold mb-2">1. Claude Code</div><div class="bg-bg-secondary rounded-xl p-3 font-mono text-sm text-accent-cyan">npm install -g @anthropic-ai/claude-code</div></div>
+<div><div class="font-semibold mb-2">2. OmniRoute</div><div class="bg-bg-secondary rounded-xl p-3 font-mono text-sm text-accent-cyan">git clone https://github.com/diegosouzapw/OmniRoute.git<br>cd OmniRoute<br>npm install<br>npm run dev</div><p class="text-xs text-text-muted mt-1">Затем во 2-м терминале: omniroute setup-claude && omniroute launch</p></div>
+<div><div class="font-semibold mb-2">3. DeepSeek (без Claude)</div><div class="bg-bg-secondary rounded-xl p-3 font-mono text-sm text-accent-cyan">npx @deepseek-ai/dsh web</div></div>
+</div></div></section>
+
+<section id="cheats" class="py-20 px-4 bg-bg-secondary/50"><div class="max-w-7xl mx-auto"><div class="text-center mb-10"><h2 class="text-3xl font-bold">10 читерских кодов</h2></div><div class="lg:grid lg:grid-cols-5 gap-6"><div class="lg:col-span-3"><div id="cheat-cards" class="grid sm:grid-cols-2 gap-3"></div></div><div class="lg:col-span-2"><div class="sticky top-24 p-5 rounded-2xl bg-bg-card border border-bg-border"><h3 class="font-semibold mb-3">Сборщик <span id="selected-count" class="text-xs text-accent-blue">0</span></h3><div id="selected-tags" class="flex flex-wrap gap-2 mb-3 min-h-[28px]"></div><textarea id="user-prompt" rows="3" placeholder="Промпт..." class="w-full px-3 py-2 rounded-xl bg-bg-secondary border border-bg-border text-sm mb-3 outline-none focus:border-accent-blue"></textarea><button id="copy-prompt-btn" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-accent-blue to-accent-purple font-semibold text-sm">Скопировать промпт</button></div></div></div></div></section>
+
+<section id="musthave" class="py-16 px-4"><div class="max-w-4xl mx-auto"><h2 class="text-3xl font-bold text-center mb-8">Must-have</h2>
+<div class="card-glow p-6 rounded-2xl bg-bg-card border border-bg-border mb-4"><h3 class="font-bold text-xl mb-2">🚀 OmniRoute</h3><p class="text-text-muted text-sm mb-2">150+ провайдеров, free-тиры, ~1,5 млрд токенов/мес</p><a href="https://github.com/diegosouzapw/OmniRoute" target="_blank" class="text-accent-blue text-sm">GitHub →</a></div>
+<div class="card-glow p-6 rounded-2xl bg-bg-card border border-bg-border"><h3 class="font-bold text-xl mb-2">🌊 DeepSeek Harness</h3><div class="font-mono text-sm text-accent-cyan mb-2">npx @deepseek-ai/dsh web</div><a href="https://github.com/deepseek-ai/deepseek-harness" target="_blank" class="text-accent-blue text-sm">GitHub →</a></div>
+</div></section>
+
+<footer class="border-t border-bg-border py-8 text-center text-sm text-text-muted"><div class="font-bold text-white mb-2">VibeCode Hub</div><a href="https://github.com/hursaalo/vibecode-hub/blob/main/windows-setup.md" class="text-accent-blue">Windows setup →</a></footer>
+
+<script>
+const cheats=[{code:'/truth',desc:'Без вежливости'},{code:'/human',desc:'Как от человека'},{code:'/nofluff',desc:'Без воды'},{code:'/devil',desc:'Спорит'},{code:'/odds',desc:'Вероятность'},{code:'/decode',desc:'Мелкий шрифт'},{code:'/simulate',desc:'На 5 лет'},{code:'/genius',desc:'Думает дольше'},{code:'/shrink',desc:'Почему этим'},{code:'/rewire',desc:'Распорядок'}];
+let selectedCodes=JSON.parse(localStorage.getItem('vibeSelectedCodes')||'[]');
+function showToast(m){const t=document.getElementById('toast');t.textContent=m||'Скопировано!';t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500)}
+function copyText(text,btn){navigator.clipboard.writeText(text).then(()=>{showToast();if(btn){const o=btn.innerHTML;btn.innerHTML='✓';setTimeout(()=>btn.innerHTML=o,1500)}}).catch(()=>{const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);showToast()})}
+function renderCheatCards(){const c=document.getElementById('cheat-cards');c.innerHTML=cheats.map(x=>{const s=selectedCodes.includes(x.code);return '<div class="cheat-card card-glow p-4 rounded-2xl bg-bg-card border border-bg-border cursor-pointer '+(s?'card-selected':'')+'" data-code="'+x.code+'"><div class="flex justify-between mb-2"><span class="code-badge px-2 py-1 rounded-lg text-sm">'+x.code+'</span></div><p class="text-sm text-text-muted">'+x.desc+'</p></div>'}).join('');c.querySelectorAll('.cheat-card').forEach(card=>card.onclick=()=>toggleCode(card.dataset.code));updateSelectedUI()}
+function toggleCode(code){const i=selectedCodes.indexOf(code);if(i>-1)selectedCodes.splice(i,1);else selectedCodes.push(code);localStorage.setItem('vibeSelectedCodes',JSON.stringify(selectedCodes));renderCheatCards()}
+function updateSelectedUI(){document.getElementById('selected-count').textContent=selectedCodes.length;document.getElementById('selected-tags').innerHTML=selectedCodes.map(c=>'<span class="px-2 py-1 rounded-lg bg-accent-blue/15 text-accent-blue text-xs font-mono">'+c+'</span>').join('')}
+document.getElementById('copy-prompt-btn').onclick=()=>{const u=document.getElementById('user-prompt').value.trim();const p=selectedCodes.join(' ');const f=p?(p+(u?'\n\n'+u:'')):u;if(!f){showToast('Выбери коды');return}copyText(f);showToast('Промпт скопирован!')};
+function downloadFile(f,t){const b=new Blob([t],{type:'text/plain;charset=utf-8'});const u=URL.createObjectURL(b);const a=document.createElement('a');a.href=u;a.download=f;document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(u);showToast('Скачано: '+f)}
+var SETUP_SH='#!/bin/bash\nnpm install -g @anthropic-ai/claude-code\nnpm install -g --allow-scripts=@anthropic-ai/claude-code\ngit clone https://github.com/diegosouzapw/OmniRoute.git\ncd OmniRoute && npm i\necho Run: npm run dev\necho Then: omniroute setup-claude && omniroute launch\n';
+var SETUP_MD='# VibeCode Hub\n\n## Windows: git не распознан\n1. https://git-scm.com/download/win\n2. Или Download ZIP с GitHub OmniRoute\n\n## Claude Code\nnpm install -g @anthropic-ai/claude-code\nnpm install -g --allow-scripts=@anthropic-ai/claude-code\n\n## OmniRoute\ngit clone https://github.com/diegosouzapw/OmniRoute.git\ncd OmniRoute && npm i && npm run dev\n# 2nd terminal:\nomniroute setup-claude\nomniroute launch\n\n## DeepSeek\nnpx @deepseek-ai/dsh web\n';
+document.getElementById('btn-download-all').onclick=()=>downloadFile('vibecode-setup.sh',SETUP_SH);
+document.getElementById('btn-download-md').onclick=()=>downloadFile('vibecode-windows.md',SETUP_MD);
+renderCheatCards();
+</script>
+</body>
+</html>

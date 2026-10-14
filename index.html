@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="ru" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VibeCode Hub — Всё для Claude Code и ChatGPT 2026</title>
+  <meta name="description" content="10 читерских кодов + 24 плагина + скиллы + open-source инструменты для Claude Code и ChatGPT" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            bg: {
+              primary: '#07070b',
+              secondary: '#0c0c12',
+              card: '#12121a',
+              border: '#1e1e2e',
+            },
+            accent: {
+              blue: '#3b82f6',
+              purple: '#8b5cf6',
+              cyan: '#06b6d4',
+              pink: '#ec4899',
+            },
+            text: {
+              muted: '#a1a1aa',
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          boxShadow: {
+            'glow-blue': '0 0 20px rgba(59, 130, 246, 0.4)',
+            'glow-purple': '0 0 20px rgba(139, 92, 246, 0.4)',
+            'glow-cyan': '0 0 20px rgba(6, 182, 212, 0.4)',
+            'glow-pink': '0 0 20px rgba(236, 72, 153, 0.4)',
+          },
+          animation: {
+            'float': 'float 6s ease-in-out infinite',
+            'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            'fade-in': 'fadeIn 0.6s ease-out forwards',
+            'slide-up': 'slideUp 0.5s ease-out forwards',
+          },
+          keyframes: {
+            float: {
+              '0%, 100%': { transform: 'translateY(0px)' },
+              '50%': { transform: 'translateY(-12px)' },
+            },
+            fadeIn: {
+              '0%': { opacity: '0' },
+              '100%': { opacity: '1' },
+            },
+            slideUp: {
+              '0%': { opacity: '0', transform: 'translateY(20px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' },
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      background: #07070b;
+      color: #fff;
+      font-family: 'Inter', system-ui, sans-serif;
+      overflow-x: hidden;
+    }
+    .font-mono { font-family: 'JetBrains Mono', monospace; }
+
+    /* Particles canvas */
+    #particles-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Card hover glow */
+    .card-glow {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .card-glow:hover {
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: 0 0 30px rgba(59, 130, 246, 0.25), 0 10px 40px rgba(0,0,0,0.4);
+      border-color: rgba(59, 130, 246, 0.5);
+    }
+
+    .card-selected {
+      border-color: #3b82f6 !important;
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(139, 92, 246, 0.1)) !important;
+      box-shadow: 0 0 25px rgba(59, 130, 246, 0.35);
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      color: white;
+      padding: 0.875rem 1.75rem;
+      border-radius: 9999px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      z-index: 9999;
+      opacity: 0;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 10px 40px rgba(59, 130, 246, 0.4);
+      pointer-events: none;
+    }
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: #0c0c12; }
+    ::-webkit-scrollbar-thumb { background: #1e1e2e; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #3b82f6; }
+
+    /* Tab active */
+    .tab-btn.active {
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      color: white;
+      box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
+    }
+
+    /* Checklist */
+    .checklist-item {
+      transition: all 0.25s ease;
+    }
+    .checklist-item.checked {
+      background: rgba(6, 182, 212, 0.1);
+      border-color: rgba(6, 182, 212, 0.4);
+    }
+    .checklist-item.checked .check-icon {
+      background: #06b6d4;
+      border-color: #06b6d4;
+    }
+    .checklist-item.checked .check-icon svg {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    /* Sticky prompt panel on mobile */
+    @media (max-width: 1023px) {
+      #prompt-panel {
+        position: sticky;
+        bottom: 0;
+        z-index: 40;
+        margin-top: 1.5rem;
+      }
+    }
+
+    /* Gradient text */
+    .gradient-text {
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6, #06b6d4);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* Nav blur */
+    .nav-blur {
+      backdrop-filter: blur(16px);
+      background: rgba(7, 7, 11, 0.85);
+      border-bottom: 1px solid rgba(30, 30, 46, 0.8);
+    }
+
+    /* Animate on scroll */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Code badge */
+    .code-badge {
+      font-family: 'JetBrains Mono', monospace;
+      background: rgba(59, 130, 246, 0.15);
+      color: #60a5fa;
+      border: 1px solid rgba(59, 130, 246, 0.3);
+    }
+
+    /* Progress ring for checklist */
+    .progress-ring {
+      transition: stroke-dashoffset 0.4s ease;
+    }
+  </style>
+</head>
+<body class="bg-bg-primary text-white antialiased">
+
+  <!-- Toast -->
+  <div id="toast" class="toast">Промпт скопирован!</div>
+
+  <!-- Navigation -->
+  <nav class="fixed top-0 left-0 right-0 z-50 nav-blur">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <a href="#hero" class="flex items-center gap-2 group">
+          <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-accent-blue to-accent-purple flex items-center justify-center shadow-glow-blue group-hover:scale-110 transition-transform">
+            <span class="text-white font-bold text-sm">V</span>
+          </div>
+          <span class="font-bold text-lg tracking-tight">VibeCode <span class="text-accent-cyan">Hub</span></span>
+        </a>
+        <div class="hidden md:flex items-center gap-1">
+          <a href="#cheats" class="px-3 py-2 text-sm text-text-muted hover:text-white transition-colors rounded-lg hover:bg-white/5">Коды</a>
+          <a href="#skills" class="px-3 py-2 text-sm text-text-muted hover:text-white transition-colors rounded-lg hover:bg-white/5">Скиллы</a>
+          <a href="#plugins24" class="px-3 py-2 text-sm text-text-muted hover:text-white transition-colors rounded-lg hover:bg-white/5">24 штуки</a>
+          <a href="#musthave" class="px-3 py-2 text-sm text-text-muted hover:text-white transition-colors rounded-lg hover:bg-white/5">Must-have</a>
+          <a href="#opensource" class="px-3 py-2 text-sm text-text-muted hover:text-white transition-colors rounded-lg hover:bg-white/5">Open-source</a>
+          <a href="#checklist" class="px-3 py-2 text-sm text-text-muted hover:text-white transition-colors rounded-lg hover:bg-white/5">Чек-лист</a>
+        </div>
+        <button id="mobile-menu-btn" class="md:hidden p-2 rounded-lg hover:bg-white/5 text-text-muted">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+      </div>
+    </div>
+    <!-- Mobile menu -->
+    <div id="mobile-menu" class="hidden md:hidden border-t border-bg-border bg-bg-secondary">
+      <div class="px-4 py-3 space-y-1">
+        <a href="#cheats" class="block px-3 py-2 text-sm text-text-muted hover:text-white rounded-lg hover:bg-white/5">Читерские коды</a>
+        <a href="#skills" class="block px-3 py-2 text-sm text-text-muted hover:text-white rounded-lg hover:bg-white/5">Скиллы</a>
+        <a href="#plugins24" class="block px-3 py-2 text-sm text-text-muted hover:text-white rounded-lg hover:bg-white/5">24 штуки</a>
+        <a href="#musthave" class="block px-3 py-2 text-sm text-text-muted hover:text-white rounded-lg hover:bg-white/5">Must-have</a>
+        <a href="#opensource" class="block px-3 py-2 text-sm text-text-muted hover:text-white rounded-lg hover:bg-white/5">Open-source</a>
+        <a href="#checklist" class="block px-3 py-2 text-sm text-text-muted hover:text-white rounded-lg hover:bg-white/5">Чек-лист</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ==================== HERO ==================== -->
+  <section id="hero" class="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
+    <canvas id="particles-canvas"></canvas>
+    <div class="absolute inset-0 bg-gradient-to-b from-transparent via-bg-primary/40 to-bg-primary pointer-events-none"></div>
+    
+    <div class="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 text-center">
+      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-accent-blue/10 border border-accent-blue/30 text-accent-blue text-sm font-medium mb-8 animate-fade-in">
+        <span class="w-2 h-2 rounded-full bg-accent-cyan animate-pulse"></span>
+        Дашборд вайб-кодера 2026
+      </div>
+      
+      <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tight leading-[1.1] mb-6">
+        Всё, что нужно<br>
+        <span class="gradient-text">Claude Code и ChatGPT</span><br>
+        в 2026
+      </h1>
+      
+      <p class="text-lg sm:text-xl text-text-muted max-w-2xl mx-auto mb-10 leading-relaxed">
+        10 читерских кодов + 24 плагина + скиллы + open-source инструменты.<br class="hidden sm:block">
+        Собери свой арсенал за 5 минут.
+      </p>
+      
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <a href="#cheats" class="group relative inline-flex items-center gap-2 px-8 py-4 rounded-2xl bg-gradient-to-r from-accent-blue to-accent-purple font-semibold text-white shadow-glow-blue hover:shadow-glow-purple transition-all duration-300 hover:scale-105 active:scale-95">
+          <span>Читерские коды</span>
+          <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+        </a>
+        <a href="#skills" class="inline-flex items-center gap-2 px-8 py-4 rounded-2xl bg-bg-card border border-bg-border font-semibold text-white hover:border-accent-cyan/50 hover:shadow-glow-cyan transition-all duration-300 hover:scale-105 active:scale-95">
+          Скиллы & Плагины
+        </a>
+      </div>
+
+      <!-- Stats -->
+      <div class="mt-16 grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-3xl mx-auto">
+        <div class="p-4 rounded-2xl bg-bg-card/60 border border-bg-border backdrop-blur-sm">
+          <div class="text-2xl sm:text-3xl font-bold text-accent-blue">10</div>
+          <div class="text-xs sm:text-sm text-text-muted mt-1">читерских кодов</div>
+        </div>
+        <div class="p-4 rounded-2xl bg-bg-card/60 border border-bg-border backdrop-blur-sm">
+          <div class="text-2xl sm:text-3xl font-bold text-accent-purple">24</div>
+          <div class="text-xs sm:text-sm text-text-muted mt-1">плагина & MCP</div>
+        </div>
+        <div class="p-4 rounded-2xl bg-bg-card/60 border border-bg-border backdrop-blur-sm">
+          <div class="text-2xl sm:text-3xl font-bold text-accent-cyan">5</div>
+          <div class="text-xs sm:text-sm text-text-muted mt-1">мощных скиллов</div>
+        </div>
+        <div class="p-4 rounded-2xl bg-bg-card/60 border border-bg-border backdrop-blur-sm">
+          <div class="text-2xl sm:text-3xl font-bold text-accent-pink">∞</div>
+          <div class="text-xs sm:text-sm text-text-muted mt-1">вайб-кодинг</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 10 ЧИТЕРСКИХ КОДОВ ==================== -->
+  <section id="cheats" class="py-20 sm:py-28 relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12 reveal">
+        <span class="inline-block px-3 py-1 rounded-full bg-accent-blue/10 text-accent-blue text-xs font-semibold tracking-wider uppercase mb-4">ChatGPT Power</span>
+        <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold mb-4">10 читерских кодов</h2>
+        <p class="text-text-muted max-w-xl mx-auto">Выбери несколько команд — они автоматически добавятся в начало твоего промпта</p>
+      </div>
+
+      <div class="lg:grid lg:grid-cols-5 lg:gap-8">
+        <!-- Cards grid -->
+        <div class="lg:col-span-3">
+          <div id="cheat-cards" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <!-- Cards injected by JS -->
+          </div>
+        </div>
+
+        <!-- Prompt panel -->
+        <div id="prompt-panel" class="lg:col-span-2 mt-8 lg:mt-0">
+          <div class="sticky top-24 p-6 rounded-2xl bg-bg-card border border-bg-border shadow-xl">
+            <div class="flex items-center justify-between mb-4">
+              <h3 class="font-semibold text-lg">Сборщик промпта</h3>
+              <span id="selected-count" class="text-xs px-2.5 py-1 rounded-full bg-accent-blue/20 text-accent-blue font-medium">0 выбрано</span>
+            </div>
+            
+            <div id="selected-tags" class="flex flex-wrap gap-2 mb-4 min-h-[32px]"></div>
+            
+            <label class="block text-sm text-text-muted mb-2">Напиши свой промпт</label>
+            <textarea id="user-prompt" rows="5" placeholder="Например: напиши лендинг для SaaS-продукта..." class="w-full px-4 py-3 rounded-xl bg-bg-secondary border border-bg-border text-white placeholder-text-muted/60 focus:outline-none focus:border-accent-blue focus:ring-1 focus:ring-accent-blue/50 resize-none font-sans text-sm transition-colors"></textarea>
+            
+            <div class="mt-4 space-y-3">
+              <button id="build-prompt-btn" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-accent-blue to-accent-purple font-semibold text-white hover:shadow-glow-blue transition-all duration-300 active:scale-[0.98]">
+                Собрать готовый промпт
+              </button>
+              <button id="copy-prompt-btn" class="w-full py-3.5 rounded-xl bg-bg-secondary border border-bg-border font-semibold text-white hover:border-accent-cyan hover:shadow-glow-cyan transition-all duration-300 active:scale-[0.98] flex items-center justify-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                Скопировать
+              </button>
+            </div>
+            
+            <div id="final-prompt-preview" class="mt-4 hidden">
+              <label class="block text-sm text-text-muted mb-2">Готовый промпт</label>
+              <pre id="final-prompt-text" class="p-4 rounded-xl bg-bg-secondary border border-bg-border text-sm font-mono text-accent-cyan whitespace-pre-wrap break-words max-h-48 overflow-y-auto"></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 5 МОЩНЫХ СКИЛЛОВ ==================== -->
+  <section id="skills" class="py-20 sm:py-28 bg-bg-secondary/50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12 reveal">
+        <span class="inline-block px-3 py-1 rounded-full bg-accent-purple/10 text-accent-purple text-xs font-semibold tracking-wider uppercase mb-4">Claude Code</span>
+        <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold mb-4">5 мощных скиллов</h2>
+        <p class="text-text-muted max-w-xl mx-auto">Установи и Claude сразу станет в разы полезнее</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Skill cards -->
+        <div class="card-glow p-6 rounded-2xl bg-bg-card border border-bg-border reveal" data-delay="0">
+          <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-pink-500/20 to-pink-500/5 border border-pink-500/30 flex items-center justify-center mb-4">
+            <span class="text-2xl">🧑‍💻</span>
+          </div>
+          <h3 class="text-xl font-bold mb-2">Humanizer</h3>
+          <p class="text-text-muted text-sm leading-relaxed mb-5">Убирает из текста всё, по чему видно, что писал ИИ. Посты звучат как от живого человека.</p>
+          <button onclick="copyText('npx skills add humanizer', this)" class="w-full py-2.5 rounded-xl bg-bg-secondary border border-bg-border text-sm font-medium hover:border-accent-pink hover:text-accent-pink transition-all flex items-center justify-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+            Скопировать установку
+          </button>
+        </div>
+
+        <div class="card-glow p-6 rounded-2xl bg-bg-card border border-bg-border reveal" data-delay="100">
+          <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500/20 to-blue-500/5 border border-blue-500/30 flex items-center justify-center mb-4">
+            <span class="text-2xl">📄</span>
+          </div>
+          <h3 class="text-xl font-bold mb-2">document-skills</h3>
+          <p class="text-text-muted text-sm leading-relaxed mb-5">Официальный от Anthropic. Claude сам делает Excel, Word, презентации и PDF.</p>
+          <button onclick="copyText('npx skills add anthropic/document-skills', this)" class="w-full py-2.5 rounded-xl bg-bg-secondary border border-bg-border text-sm font-medium hover:border-accent-blue hover:text-accent-blue transition-all flex items-center justify-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+            Скопировать установку
+          </button>
+        </div>
+
+        <div class="card-glow p-6 rounded-2xl bg-bg-card border border-bg-border reveal" data-delay="200">
+          <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500/20 to-purple-500/5 border border-purple-500/30 flex items-center justify-center mb-4">
+            <span class="text-2xl">🎨</span>
+          </div>
+          <h3 class="text-xl font-bold mb-2">UI UX Pro Max</h3>
+          <p class="text-text-muted text-sm leading-relaxed mb-5">Под твой проект собирает целую дизайн-систему: стиль, цвета, расположение кнопок (67 стилей и палитр).</p>
+          <button onclick="copyText('npx skills add ui-ux-pro-max', this)" class="w-full py-2.5 rounded-xl bg-bg-secondary border border-bg-border text-sm font-medium hover:border-accent-purple hover:text-accent-purple transition-all flex items-center justify-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+            Скопировать установку
+          </button>
+        </div>
+
+        <div class="card-glow p-6 rounded-2xl bg-bg-card border border-bg-border reveal" data-delay="300">
+          <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-500/20 to-cyan-500/5 border border-cyan-500/30 flex items-center justify-center mb-4">
+            <span class="text-2xl">📈</span>
+          </div>
+          <h3 class="text-xl font-bold mb-2">Marketing Skills</h3>
+          <p class="text-text-muted text-sm leading-relaxed mb-5">50 скиллов маркетолога: тексты, продвижение в поиске, реклама, цены.</p>
+          <button onclick="copyText('npx skills add marketing-skills', this)" class="w-full py-2.5 rounded-xl bg-bg-secondary border border-bg-border text-sm font-medium hover:border-accent-cyan hover:text-accent-cyan transition-all flex items-center justify-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+            Скопировать установку
+          </button>
+        </div>
+
+        <div class="card-glow p-6 rounded-2xl bg-bg-card border border-bg-border md:col-span-2 lg:col-span-1 reveal" data-delay="400">
+          <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-orange-500/20 to-orange-500/5 border border-orange-500/30 flex items-center justify-center mb-4">
+            <span class="text-2xl">🔥</span>
+          </div>
+          <h3 class="text-xl font-bold mb-2">last30days</h3>
+          <p class="text-text-muted text-sm leading-relaxed mb-5">Ищет, что люди реально обсуждают за последний месяц (Reddit, X, YouTube, TikTok) и собирает в одну сводку.</p>
+          <button onclick="copyText('npx skills add last30days', this)" class="w-full py-2.5 rounded-xl bg-bg-secondary border border-bg-border text-sm font-medium hover:border-orange-400 hover:text-orange-400 transition-all flex items-center justify-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+            Скопировать установку
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 24 ШТУКИ ==================== -->
+  <section id="plugins24" class="py-20 sm:py-28">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12 reveal">
+        <span class="inline-block px-3 py-1 rounded-full bg-accent-cyan/10 text-accent-cyan text-xs font-semibold tracking-wider uppercase mb-4">Claude Code Arsenal</span>
+        <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold mb-4">24 штуки, которые стоит поставить</h2>
+        <p class="text-text-muted max-w-xl mx-auto">Плагины · Навыки · MCP-серверы (с заменами под РФ)</p>
+      </div>
+
+      <!-- Tabs -->
+      <div class="flex flex-wrap justify-center gap-2 mb-10">
+        <button class="tab-btn active px-5 py-2.5 rounded-xl text-sm font-medium bg-bg-card border border-bg-border transition-all" data-tab="plugins">8 Плагинов</button>
+        <button class="tab-btn px-5 py-2.5 rounded-xl text-sm font-medium bg-bg-card border border-bg-border text-text-muted hover:text-white transition-all" data-tab="skills24">8 Навыков</button>
+        <button class="tab-btn px-5 py-2.5 rounded-xl text-sm font-medium bg-bg-card border border-bg-border text-text-muted hover:text-white transition-all" data-tab="mcp">8 MCP</button>
+      </div>
+
+      <!-- Tab content -->
+      <div id="tab-plugins" class="tab-content grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <!-- injected -->
+      </div>
+      <div id="tab-skills24" class="tab-content hidden grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <!-- injected -->
+      </div>
+      <div id="tab-mcp" class="tab-content hidden grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <!-- injected -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== MUST-HAVE ==================== -->
+  <section id="musthave" class="py-20 sm:py-28 bg-bg-secondary/50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12 reveal">
+        <span class="inline-block px-3 py-1 rounded-full bg-accent-pink/10 text-accent-pink text-xs font-semibold tracking-wider uppercase mb-4">Без этого никуда</span>
+        <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold mb-4">5 плагинов, без которых Claude Code бесполезен</h2>
+      </div>
+
+      <div class="space-y-5">
+        <div class="card-glow p-6 sm:p-8 rounded-2xl bg-bg-card border border-bg-border reveal flex flex-col sm:flex-row gap-6 items-start">
+          <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500/20 to-cyan-500/10 border border-blue-500/30 flex items-center justify-center flex-shrink-0 text-2xl">🚀</div>
+          <div class="flex-1">
+            <h3 class="text-xl font-bold mb-2">OmniRoute</h3>
+            <p class="text-text-muted leading-relaxed">Даёт практически безлимитное использование, подключаясь к 200+ бесплатным AI-провайдерам. До 1,5 миллиарда бесплатных токенов в месяц. Автоматически переключается на следующую модель.</p>
+          </div>
+          <button onclick="copyText('npx plugins add omniroute', this)" class="flex-shrink-0 px-5 py-2.5 rounded-xl bg-bg-secondary border border-bg-border text-sm font-medium hover:border-accent-blue hover:text-accent-blue transition-all whitespace-nowrap">Скопировать</button>
+        </div>
+
+        <div class="card-glow p-6 sm:p-8 rounded-2xl bg-bg-card border border-bg-border reveal flex flex-col sm:flex-row gap-6 items-start">
+          <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-purple-500/20 to-pink-500/10 border border-purple-500/30 flex items-center justify-center flex-shrink-0 text-2xl">🧠</div>
+          <div class="flex-1">
+            <h3 class="text-xl font-bold mb-2">Claude Mem</h3>
+            <p class="text-text-muted leading-relaxed">Память между всеми сессиями. Больше не нужно объяснять одно и то же.</p>
+          </div>
+          <button onclick="copyText('npx plugins add claude-mem', this)" class="flex-shrink-0 px-5 py-2.5 rounded-xl bg-bg-secondary border border-bg-border text-sm font-medium hover:border-accent-purple hover:text-accent-purple transition-all whitespace-nowrap">Скопировать</button>
+        </div>
+
+        <div class="card-glow p-6 sm:p-8 rounded-2xl bg-bg-card border border-bg-border reveal flex flex-col sm:flex-row gap-6 items-start">
+          <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-cyan-500/20 to-blue-500/10 border border-cyan-500/30 flex items-center justify-center flex-shrink-0 text-2xl">📉</div>
+          <div class="flex-1">
+            <h3 class="text-xl font-bold mb-2">Hedrum</h3>
+            <p class="text-text-muted leading-relaxed">Сжимает промпты до того, как они попадают в модель (экономия до 90% токенов).</p>
+          </div>
+          <button onclick="copyText('npx plugins add hedrum', this)" class="flex-shrink-0 px-5 py-2.5 rounded-xl bg-bg-secondary border border-bg-border text-sm font-medium hover:border-accent-cyan hover:text-accent-cyan transition-all whitespace-nowrap">Скопировать</button>
+        </div>
+
+        <div class="card-glow p-6 sm:p-8 rounded-2xl bg-bg-card border border-bg-border reveal flex flex-col sm:flex-row gap-6 items-start">
+          <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-green-500/20 to-emerald-500/10 border border-green-500/30 flex items-center justify-center flex-shrink-0 text-2xl">⚙️</div>
+          <div class="flex-1">
+            <h3 class="text-xl font-bold mb-2">Claude Code Setup</h3>
+            <p class="text-text-muted leading-relaxed">Официальный от Anthropic. Сканирует всю кодовую базу и рекомендует лучшие хуки, скиллы, субагентов и MCP именно под твой проект.</p>
+          </div>
+          <button onclick="copyText('npx plugins add claude-code-setup', this)" class="flex-shrink-0 px-5 py-2.5 rounded-xl bg-bg-secondary border border-bg-border text-sm font-medium hover:border-green-400 hover:text-green-400 transition-all whitespace-nowrap">Скопировать</button>
+        </div>
+
+        <div class="card-glow p-6 sm:p-8 rounded-2xl bg-bg-card border border-bg-border reveal flex flex-col sm:flex-row gap-6 items-start">
+          <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-pink-500/20 to-rose-500/10 border border-pink-500/30 flex items-center justify-center flex-shrink-0 text-2xl">👁️</div>
+          <div class="flex-1">
+            <h3 class="text-xl font-bold mb-2">Task Observer</h3>
+            <p class="text-text-muted leading-relaxed">Следит за тем, как ты работаешь, изучает стиль и постоянно улучшает остальные скиллы в фоне.</p>
+          </div>
+          <button onclick="copyText('npx plugins add task-observer', this)" class="flex-shrink-0 px-5 py-2.5 rounded-xl bg-bg-secondary border border-bg-border text-sm font-medium hover:border-accent-pink hover:text-accent-pink transition-all whitespace-nowrap">Скопировать</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== OPEN-SOURCE ==================== -->
+  <section id="opensource" class="py-20 sm:py-28">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12 reveal">
+        <span class="inline-block px-3 py-1 rounded-full bg-green-500/10 text-green-400 text-xs font-semibold tracking-wider uppercase mb-4">Open Source</span>
+        <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold mb-4">Open-source сокровища</h2>
+        <p class="text-text-muted max-w-xl mx-auto">Бесплатные инструменты с тысячами звёзд на GitHub</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="card-glow p-6 sm:p-8 rounded-2xl bg-bg-card border border-bg-border reveal">
+          <div class="flex items-start justify-between mb-4">
+            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500/20 to-cyan-500/10 border border-blue-500/30 flex items-center justify-center text-xl">🌊</div>
+            <span class="text-xs px-2.5 py-1 rounded-full bg-yellow-500/10 text-yellow-400 font-medium">230k+ ⭐</span>
+          </div>
+          <h3 class="text-xl font-bold mb-2">DeepSeek Harness</h3>
+          <p class="text-text-muted text-sm leading-relaxed mb-5">Бесплатная open-source альтернатива Claude Code. Полная кастомизация: модель, инструменты, память, цикл агента. 53 инструмента из коробки. Работает с локальными моделями и умеет вызывать субагентов.</p>
+          <button onclick="copyText('git clone https://github.com/deepseek-ai/DeepSeek-Harness', this)" class="w-full py-2.5 rounded-xl bg-bg-secondary border border-bg-border text-sm font-medium hover:border-accent-blue hover:text-accent-blue transition-all flex items-center justify-center gap-2">
+            Скопировать клон
+          </button>
+        </div>
+
+        <div class="card-glow p-6 sm:p-8 rounded-2xl bg-bg-card border border-bg-border reveal">
+          <div class="flex items-start justify-between mb-4">
+            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500/20 to-pink-500/10 border border-purple-500/30 flex items-center justify-center text-xl">📝</div>
+            <span class="text-xs px-2.5 py-1 rounded-full bg-yellow-500/10 text-yellow-400 font-medium">210k+ ⭐</span>
+          </div>
+          <h3 class="text-xl font-bold mb-2">Файл, который делает Claude умнее</h3>
+          <p class="text-text-muted text-sm leading-relaxed mb-5">Markdown с запретами (по наблюдениям Андрея Карпати): не переусложнять, не домысливать, не лезть в чужой код без просьбы, всегда перепроверять перед «готово».</p>
+          <button onclick="copyText('# Claude Rules\n- Не переусложняй\n- Не домысливай\n- Не лезь в чужой код без просьбы\n- Всегда перепроверяй перед «готово»', this)" class="w-full py-2.5 rounded-xl bg-bg-secondary border border-bg-border text-sm font-medium hover:border-accent-purple hover:text-accent-purple transition-all flex items-center justify-center gap-2">
+            Скопировать правила
+          </button>
+        </div>
+
+        <div class="card-glow p-6 sm:p-8 rounded-2xl bg-bg-card border border-bg-border reveal">
+          <div class="flex items-start justify-between mb-4">
+            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-500/20 to-blue-500/10 border border-cyan-500/30 flex items-center justify-center text-xl">🐦</div>
+          </div>
+          <h3 class="text-xl font-bold mb-2">BlackBird</h3>
+          <p class="text-text-muted text-sm leading-relaxed mb-5">Ищет аккаунты человека по username на сотнях сайтов.</p>
+          <button onclick="copyText('pip install blackbird', this)" class="w-full py-2.5 rounded-xl bg-bg-secondary border border-bg-border text-sm font-medium hover:border-accent-cyan hover:text-accent-cyan transition-all flex items-center justify-center gap-2">
+            Скопировать установку
+          </button>
+        </div>
+
+        <div class="card-glow p-6 sm:p-8 rounded-2xl bg-bg-card border border-bg-border reveal">
+          <div class="flex items-start justify-between mb-4">
+            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-green-500/20 to-emerald-500/10 border border-green-500/30 flex items-center justify-center text-xl">🎤</div>
+          </div>
+          <h3 class="text-xl font-bold mb-2">Voice and Typer</h3>
+          <p class="text-text-muted text-sm leading-relaxed mb-5">Голосовой ввод на Mac и Windows.</p>
+          <button onclick="copyText('brew install voice-and-typer  # или скачай с GitHub', this)" class="w-full py-2.5 rounded-xl bg-bg-secondary border border-bg-border text-sm font-medium hover:border-green-400 hover:text-green-400 transition-all flex items-center justify-center gap-2">
+            Скопировать установку
+          </button>
+        </div>
+
+        <div class="card-glow p-6 sm:p-8 rounded-2xl bg-bg-card border border-bg-border md:col-span-2 reveal">
+          <div class="flex items-start justify-between mb-4">
+            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-orange-500/20 to-amber-500/10 border border-orange-500/30 flex items-center justify-center text-xl">📱</div>
+          </div>
+          <h3 class="text-xl font-bold mb-2">Android SMS Gateway</h3>
+          <p class="text-text-muted text-sm leading-relaxed mb-5">Превращает Android в свой SMS-шлюз через API.</p>
+          <button onclick="copyText('git clone https://github.com/capcom6/android-sms-gateway', this)" class="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-bg-secondary border border-bg-border text-sm font-medium hover:border-orange-400 hover:text-orange-400 transition-all flex items-center justify-center gap-2">
+            Скопировать клон
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== ЧЕК-ЛИСТ ==================== -->
+  <section id="checklist" class="py-20 sm:py-28 bg-bg-secondary/50">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12 reveal">
+        <span class="inline-block px-3 py-1 rounded-full bg-accent-cyan/10 text-accent-cyan text-xs font-semibold tracking-wider uppercase mb-4">Legal Ready</span>
+        <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold mb-4">Чек-лист легального сайта</h2>
+        <p class="text-text-muted">Отмечай пункты — прогресс сохранится</p>
+      </div>
+
+      <!-- Progress -->
+      <div class="mb-8 flex items-center gap-4 reveal">
+        <div class="relative w-16 h-16 flex-shrink-0">
+          <svg class="w-16 h-16 -rotate-90" viewBox="0 0 36 36">
+            <circle cx="18" cy="18" r="15.5" fill="none" stroke="#1e1e2e" stroke-width="3" />
+            <circle id="progress-circle" class="progress-ring" cx="18" cy="18" r="15.5" fill="none" stroke="#06b6d4" stroke-width="3" stroke-dasharray="97.4" stroke-dashoffset="97.4" stroke-linecap="round" />
+          </svg>
+          <span id="progress-text" class="absolute inset-0 flex items-center justify-center text-sm font-bold">0%</span>
+        </div>
+        <div>
+          <div class="font-semibold">Прогресс</div>
+          <div class="text-sm text-text-muted"><span id="checked-count">0</span> из 13 пунктов</div>
+        </div>
+      </div>
+
+      <div id="checklist-items" class="space-y-3">
+        <!-- injected by JS -->
+      </div>
+
+      <div class="mt-8 text-center">
+        <button id="reset-checklist" class="text-sm text-text-muted hover:text-white transition-colors underline underline-offset-4">Сбросить все</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="border-t border-bg-border py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-accent-blue to-accent-purple flex items-center justify-center">
+            <span class="text-white font-bold text-sm">V</span>
+          </div>
+          <span class="font-bold">VibeCode <span class="text-accent-cyan">Hub</span></span>
+        </div>
+
+        <div class="flex flex-wrap items-center justify-center gap-4 text-sm text-text-muted">
+          <a href="https://t.me/" target="_blank" rel="noopener" class="hover:text-accent-blue transition-colors">Telegram авторов</a>
+          <span class="hidden sm:inline">·</span>
+          <button id="copy-all-btn" class="hover:text-accent-cyan transition-colors">Скопировать все команды</button>
+          <span class="hidden sm:inline">·</span>
+          <a href="#" class="hover:text-white transition-colors">Политика</a>
+          <a href="#" class="hover:text-white transition-colors">Условия</a>
+        </div>
+      </div>
+      <div class="mt-8 text-center text-xs text-text-muted/60">
+        © 2026 VibeCode Hub. Сделано для вайб-кодеров. Не является официальным продуктом Anthropic или OpenAI.
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // ========== DATA ==========
+    const cheats = [
+      { code: '/truth', desc: 'Без вежливости, прямой ответ' },
+      { code: '/human', desc: 'Ответ как от живого человека' },
+      { code: '/nofluff', desc: 'Вдвое короче, без воды' },
+      { code: '/devil', desc: 'Спорит с твоей идеей' },
+      { code: '/odds', desc: 'Процент, насколько это вероятно' },
+      { code: '/decode', desc: 'Что спрятано в договоре и мелком шрифте' },
+      { code: '/simulate', desc: 'Твоё решение на 5 лет вперёд' },
+      { code: '/genius', desc: 'Думает дольше, ответ сильнее' },
+      { code: '/shrink', desc: 'Почему ты на самом деле этим занимаешься' },
+      { code: '/rewire', desc: 'Распорядок дня по тому, что он о тебе знает' },
+    ];
+
+    const plugins8 = [
+      { name: 'frontend-design', desc: 'Интерфейс не как у ИИ' },
+      { name: 'superpowers', desc: 'Claude работает в команде' },
+      { name: 'gstack', desc: '23 агента одной командой' },
+      { name: 'context7', desc: 'Свежая документация библиотек' },
+      { name: 'marketing', desc: 'Контент, SEO, письма' },
+      { name: 'productivity', desc: 'Память проекта' },
+      { name: 'anthropic/skills', desc: 'Word, Excel, PDF' },
+      { name: 'playwright', desc: 'Сам тестит твой сайт' },
+    ];
+
+    const skills8 = [
+      { name: 'skill-creator', desc: 'Соберёшь свой навык' },
+      { name: 'claude-seo', desc: 'SEO по живым данным' },
+      { name: 'caveman', desc: 'До 65% экономии токенов' },
+      { name: 'security-review', desc: 'Находит дыры до релиза' },
+      { name: 'hyperframes', desc: 'HTML и видео' },
+      { name: 'ui-ux-pro-max', desc: '67 стилей и палитр' },
+      { name: 'bulletproof', desc: 'Тесты, ревью, деплой' },
+      { name: 'dataviz', desc: 'Графики по данным' },
+    ];
+
+    const mcp8 = [
+      { name: 'telegram', desc: 'Продажи в Телеге (вместо Slack)' },
+      { name: 'ЮKassa', desc: 'Оплаты и чеки (вместо Stripe)' },
+      { name: 'yandex cloud', desc: 'Хостинг в РФ без VPN' },
+      { name: 'github', desc: 'Код, версии, деплой' },
+      { name: 'supabase', desc: 'Бэкенд без бэкендера' },
+      { name: 'notion', desc: 'База знаний и CRM' },
+      { name: 'firecrawl', desc: 'Данные с сайтов' },
+      { name: 'n8n', desc: 'Автоматизации без кода' },
+    ];
+
+    const checklistItems = [
+      'Политика конфиденциальности',
+      'Условия использования',
+      'Политика возврата средств',
+      'Политика cookies + баннер согласия',
+      'Альтернативный текст для доступности',
+      'Правильный цветовой контраст',
+      'Навигация с клавиатуры',
+      'Реквизиты и данные компании',
+      'Согласие по возрасту',
+      'Ссылка для отписки в рассылках',
+      'Лицензии на шрифты и изображения',
+      'Возможность запросить удаление данных',
+      'Убраны dark patterns, скрытые комиссии, фейковые отзывы',
+    ];
+
+    // ========== STATE ==========
+    let selectedCodes = JSON.parse(localStorage.getItem('vibeSelectedCodes') || '[]');
+    let checklistState = JSON.parse(localStorage.getItem('vibeChecklist') || '{}');
+
+    // ========== TOAST ==========
+    function showToast(msg = 'Скопировано!') {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2500);
+    }
+
+    // ========== COPY ==========
+    function copyText(text, btn) {
+      navigator.clipboard.writeText(text).then(() => {
+        showToast('Скопировано!');
+        if (btn) {
+          const orig = btn.innerHTML;
+          btn.innerHTML = '✓ Готово';
+          setTimeout(() => btn.innerHTML = orig, 1500);
+        }
+      }).catch(() => {
+        // fallback
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        showToast('Скопировано!');
+      });
+    }
+
+    // ========== CHEAT CARDS ==========
+    function renderCheatCards() {
+      const container = document.getElementById('cheat-cards');
+      container.innerHTML = cheats.map((c, i) => {
+        const isSelected = selectedCodes.includes(c.code);
+        return `
+          <div class="cheat-card card-glow p-5 rounded-2xl bg-bg-card border border-bg-border cursor-pointer ${isSelected ? 'card-selected' : ''}" data-code="${c.code}">
+            <div class="flex items-start justify-between mb-3">
+              <span class="code-badge px-2.5 py-1 rounded-lg text-sm font-semibold">${c.code}</span>
+              <div class="check-mark w-6 h-6 rounded-full border-2 ${isSelected ? 'bg-accent-blue border-accent-blue' : 'border-bg-border'} flex items-center justify-center transition-all">
+                <svg class="w-3.5 h-3.5 text-white ${isSelected ? 'opacity-100' : 'opacity-0'}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
+              </div>
+            </div>
+            <p class="text-sm text-text-muted leading-relaxed mb-4">${c.desc}</p>
+            <button class="select-btn w-full py-2 rounded-xl text-sm font-medium transition-all ${isSelected ? 'bg-accent-blue/20 text-accent-blue border border-accent-blue/40' : 'bg-bg-secondary border border-bg-border hover:border-accent-blue/50'}">
+              ${isSelected ? 'Выбрано ✓' : 'Выбрать'}
+            </button>
+          </div>
+        `;
+      }).join('');
+
+      container.querySelectorAll('.cheat-card').forEach(card => {
+        card.addEventListener('click', (e) => {
+          if (e.target.closest('button') || e.target.closest('.cheat-card')) {
+            toggleCode(card.dataset.code);
+          }
+        });
+      });
+      updateSelectedUI();
+    }
+
+    function toggleCode(code) {
+      const idx = selectedCodes.indexOf(code);
+      if (idx > -1) selectedCodes.splice(idx, 1);
+      else selectedCodes.push(code);
+      localStorage.setItem('vibeSelectedCodes', JSON.stringify(selectedCodes));
+      renderCheatCards();
+    }
+
+    function updateSelectedUI() {
+      document.getElementById('selected-count').textContent = `${selectedCodes.length} выбрано`;
+      const tags = document.getElementById('selected-tags');
+      tags.innerHTML = selectedCodes.map(c => `
+        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-accent-blue/15 text-accent-blue text-xs font-mono font-medium">
+          ${c}
+          <button onclick="event.stopPropagation(); toggleCode('${c}')" class="hover:text-white transition-colors">×</button>
+        </span>
+      `).join('');
+    }
+
+    // ========== BUILD PROMPT ==========
+    document.getElementById('build-prompt-btn').addEventListener('click', () => {
+      const userText = document.getElementById('user-prompt').value.trim();
+      const prefix = selectedCodes.join(' ');
+      const final = prefix ? (prefix + (userText ? '\n\n' + userText : '')) : (userText || 'Выбери коды и напиши промпт');
+      document.getElementById('final-prompt-text').textContent = final;
+      document.getElementById('final-prompt-preview').classList.remove('hidden');
+    });
+
+    document.getElementById('copy-prompt-btn').addEventListener('click', () => {
+      const userText = document.getElementById('user-prompt').value.trim();
+      const prefix = selectedCodes.join(' ');
+      const final = prefix ? (prefix + (userText ? '\n\n' + userText : '')) : userText;
+      if (!final) {
+        showToast('Сначала выбери коды или напиши промпт');
+        return;
+      }
+      copyText(final);
+      showToast('Промпт скопирован!');
+    });
+
+    // ========== TABS 24 ==========
+    function renderTabCards(containerId, items, prefix = '') {
+      const el = document.getElementById(containerId);
+      el.innerHTML = items.map(item => `
+        <div class="card-glow p-5 rounded-2xl bg-bg-card border border-bg-border">
+          <div class="font-mono text-sm text-accent-cyan mb-2">${item.name}</div>
+          <p class="text-sm text-text-muted mb-4 leading-relaxed">${item.desc}</p>
+          <button onclick="copyText('${prefix}${item.name}', this)" class="w-full py-2 rounded-xl bg-bg-secondary border border-bg-border text-xs font-medium hover:border-accent-cyan hover:text-accent-cyan transition-all">
+            Скопировать
+          </button>
+        </div>
+      `).join('');
+    }
+
+    renderTabCards('tab-plugins', plugins8, 'npx plugins add ');
+    renderTabCards('tab-skills24', skills8, 'npx skills add ');
+    renderTabCards('tab-mcp', mcp8, 'mcp add ');
+
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => {
+          b.classList.remove('active');
+          b.classList.add('text-text-muted');
+        });
+        btn.classList.add('active');
+        btn.classList.remove('text-text-muted');
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
+        document.getElementById('tab-' + btn.dataset.tab).classList.remove('hidden');
+      });
+    });
+
+    // ========== CHECKLIST ==========
+    function renderChecklist() {
+      const container = document.getElementById('checklist-items');
+      container.innerHTML = checklistItems.map((item, i) => {
+        const checked = checklistState[i] === true;
+        return `
+          <div class="checklist-item flex items-center gap-4 p-4 rounded-xl bg-bg-card border border-bg-border cursor-pointer ${checked ? 'checked' : ''}" data-idx="${i}">
+            <div class="check-icon w-6 h-6 rounded-md border-2 border-bg-border flex items-center justify-center flex-shrink-0 transition-all">
+              <svg class="w-3.5 h-3.5 text-white opacity-0 scale-50 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
+            </div>
+            <span class="text-sm ${checked ? 'text-white' : 'text-text-muted'}">${item}</span>
+          </div>
+        `;
+      }).join('');
+
+      container.querySelectorAll('.checklist-item').forEach(el => {
+        el.addEventListener('click', () => {
+          const idx = el.dataset.idx;
+          checklistState[idx] = !checklistState[idx];
+          localStorage.setItem('vibeChecklist', JSON.stringify(checklistState));
+          renderChecklist();
+          updateProgress();
+        });
+      });
+      updateProgress();
+    }
+
+    function updateProgress() {
+      const total = checklistItems.length;
+      const checked = Object.values(checklistState).filter(Boolean).length;
+      const pct = Math.round((checked / total) * 100);
+      document.getElementById('checked-count').textContent = checked;
+      document.getElementById('progress-text').textContent = pct + '%';
+      const circle = document.getElementById('progress-circle');
+      const circumference = 2 * Math.PI * 15.5;
+      circle.style.strokeDashoffset = circumference - (pct / 100) * circumference;
+    }
+
+    document.getElementById('reset-checklist').addEventListener('click', () => {
+      checklistState = {};
+      localStorage.setItem('vibeChecklist', JSON.stringify(checklistState));
+      renderChecklist();
+    });
+
+    // ========== COPY ALL ==========
+    document.getElementById('copy-all-btn').addEventListener('click', () => {
+      const all = [
+        '=== Читерские коды ===',
+        ...cheats.map(c => c.code + ' — ' + c.desc),
+        '',
+        '=== 5 скиллов ===',
+        'npx skills add humanizer',
+        'npx skills add anthropic/document-skills',
+        'npx skills add ui-ux-pro-max',
+        'npx skills add marketing-skills',
+        'npx skills add last30days',
+        '',
+        '=== 8 Плагинов ===',
+        ...plugins8.map(p => 'npx plugins add ' + p.name),
+        '',
+        '=== 8 Навыков ===',
+        ...skills8.map(s => 'npx skills add ' + s.name),
+        '',
+        '=== 8 MCP ===',
+        ...mcp8.map(m => 'mcp add ' + m.name),
+      ].join('\n');
+      copyText(all);
+      showToast('Все команды скопированы!');
+    });
+
+    // ========== MOBILE MENU ==========
+    document.getElementById('mobile-menu-btn').addEventListener('click', () => {
+      document.getElementById('mobile-menu').classList.toggle('hidden');
+    });
+    document.querySelectorAll('#mobile-menu a').forEach(a => {
+      a.addEventListener('click', () => document.getElementById('mobile-menu').classList.add('hidden'));
+    });
+
+    // ========== PARTICLES ==========
+    (function initParticles() {
+      const canvas = document.getElementById('particles-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      let w, h, particles = [];
+
+      function resize() {
+        w = canvas.width = canvas.offsetWidth;
+        h = canvas.height = canvas.offsetHeight;
+      }
+      window.addEventListener('resize', resize);
+      resize();
+
+      for (let i = 0; i < 60; i++) {
+        particles.push({
+          x: Math.random() * w,
+          y: Math.random() * h,
+          r: Math.random() * 1.5 + 0.5,
+          vx: (Math.random() - 0.5) * 0.4,
+          vy: (Math.random() - 0.5) * 0.4,
+          alpha: Math.random() * 0.5 + 0.1,
+        });
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, w, h);
+        particles.forEach(p => {
+          p.x += p.vx;
+          p.y += p.vy;
+          if (p.x < 0 || p.x > w) p.vx *= -1;
+          if (p.y < 0 || p.y > h) p.vy *= -1;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(59, 130, 246, ${p.alpha})`;
+          ctx.fill();
+        });
+        // lines
+        for (let i = 0; i < particles.length; i++) {
+          for (let j = i + 1; j < particles.length; j++) {
+            const dx = particles[i].x - particles[j].x;
+            const dy = particles[i].y - particles[j].y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < 120) {
+              ctx.beginPath();
+              ctx.moveTo(particles[i].x, particles[i].y);
+              ctx.lineTo(particles[j].x, particles[j].y);
+              ctx.strokeStyle = `rgba(139, 92, 246, ${0.12 * (1 - dist / 120)})`;
+              ctx.stroke();
+            }
+          }
+        }
+        requestAnimationFrame(draw);
+      }
+      draw();
+    })();
+
+    // ========== REVEAL ON SCROLL ==========
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // ========== INIT ==========
+    renderCheatCards();
+    renderChecklist();
+  </script>
+</body>
+</html>
